@@ -1,0 +1,45 @@
+version: '3.8'
+services:
+  client:
+    build:
+      context: './client'
+      dockerfile: Dockerfile
+    ports:
+      - 3000:3000
+    container_name: react-container
+    networks:
+      - mern-stack-networks
+    volumes:
+      - ./client:/app
+    depends_on: 
+      - server
+
+  server:
+    build:
+      context: './server'
+      dockerfile: Dockerfile
+    ports:
+      - 5000:5000
+    container_name: node_container
+    networks:
+      - mern-stack-networks
+    volumes:
+      - ./server:/app
+    depends_on: 
+      - mongo
+    
+  mongo:
+    image: mongo
+    ports:
+      - 27017:27017
+    container_name: mongo-container
+    networks:
+      - mern-stack-networks
+    volumes:
+      - mongoDatabase:/mern-app/mern-DB
+
+networks:
+  mern-stack-networks:
+
+volumes:
+  mongoDatabase:
